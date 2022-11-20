@@ -9,8 +9,11 @@ curs = conn.cursor()
 curs.execute(
     "CREATE TABLE IF NOT EXISTS members(Name TEXT, Vitality INTEGER, Resilience INTEGER, PossibleChildNumber INTEGER, ChildNumber INTEGER, Balance INTEGER, Position TEXT, Alive BOOLEAN, FatherId INTEGER)")
 
-# az elején létrehozza a genesis-t
-curs.execute("INSERT INTO members VALUES ('Ősapa', 15, 15, 2, 0, 300, 'Paraszt', True, 0)")
+# az elején létrehozza a genesis-t ha 0 értéke van az adatbázisnak
+get_members_number = curs.execute("SELECT COUNT(*) FROM members;")
+members_number = get_members_number.fetchone()
+if members_number[0] == 0:
+    curs.execute("INSERT INTO members VALUES ('Ősapa', 15, 15, 2, 0, 300, 'Paraszt', True, 0)")
 
 # utód létrehozása
 def born():
